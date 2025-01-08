@@ -126,7 +126,34 @@ void threadRos() {
 }
 
 void threadArdupilotJson() {
-    ardupilot_json_interface();
+    const auto period = std::chrono::microseconds(1000000 / 500); // 500 Hz
+
+    while (true) {
+        auto start_time = std::chrono::high_resolution_clock::now();
+
+        float temperatureKelvin;
+        float staticPressureHpa;
+        float diffPressureHPa;
+        sim->atmosphere(&temperatureKelvin, &staticPressureHpa, &diffPressureHPa);
+
+        ArdupilotJsonInterface::process(
+            sim->linearVelocityNed(),
+            /*sim->geoPosition()*/ sim->positionNed(), 
+            sim->attitudeFrdNed(),
+            // sim->magneticFieldWithNoiseFrd(),
+            sim->getAccelFrd(),
+            sim->getGyroFrd(),
+            sim->getAirspeedFrd(),
+            temperatureKelvin - 273.15,
+            staticPressureHpa,
+            diffPressureHPa,
+
+            setpoints,
+            (uint8_t&)arming_status
+        );
+        auto end_time = std::chrono::high_resolution_clock::now();
+        std::this_thread::sleep_for(period - (end_time - start_time));
+    }
 }
 
 int main(int argc, char* argv[]) {
