@@ -1,24 +1,3 @@
-[submodule "inno_sim_interface/inno_sim_interface"]
-	path = inno_sim_interface/inno_sim_interface
-	url = https://github.com/ZilantRobotics/inno_sim_interface.git
-[submodule "inno_sim_interface/rosbridge_suite"]
-	path = inno_sim_interface/rosbridge_suite
-	url = https://github.com/lgsvl/rosbridge_suite.git
-[submodule "uav_dynamics/timed_roslaunch"]
-	path = uav_dynamics/timed_roslaunch
-	url = https://github.com/MoriKen254/timed_roslaunch.git
-[submodule "uav_dynamics/uav_hitl_dynamics"]
-	path = uav_dynamics/uav_hitl_dynamics
-	url = https://github.com/ZilantRobotics/uav_hitl_dynamics.git
-[submodule "communicators/mavlink_communicator"]
-	path = communicators/mavlink_communicator
-	url = https://github.com/RaccoonLabDev/mavlink_communicator.git
-[submodule "communicators/uavcan_communicator"]
-	path = communicators/uavcan_communicator
-	url = https://github.com/RaccoonLabDev/uavcan_communicator.git
-[submodule "communicators/cyphal_communicator"]
-	path = communicators/cyphal_communicator
-	url = https://github.com/ZilantRobotics/cyphal_communicator
 [submodule "scripts/tools"]
 	path = scripts/tools
 	url = https://github.com/PonomarevDA/tools.git
