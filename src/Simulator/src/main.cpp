@@ -19,6 +19,7 @@
 #include "MavlinkSimInterface/mavlink_sim_interface.hpp"
 #include "ArdupilotInterface/ardupilot_json_interface.hpp"
 #include "RosInterface/ros_interface.hpp"
+#include "DronecanInterface/dronecan_interface.hpp"
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -86,7 +87,7 @@ void threadSim() {
     }
 }
 
-void communicate() {
+void px4MavlinkCommunicate() {
     float temperatureKelvin;
     float staticPressureHpa;
     float diffPressureHPa;
@@ -107,13 +108,13 @@ void communicate() {
     );
 }
 
-void threadFlightStack() {
+void threadPX4MavlinkFlightStack() {
     const auto period = std::chrono::microseconds(1000000 / 500); // 500 Hz
 
     while (true) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        communicate();
+        px4MavlinkCommunicate();
 
         auto end_time = std::chrono::high_resolution_clock::now();
         std::this_thread::sleep_for(period - (end_time - start_time));
@@ -175,13 +176,16 @@ int main(int argc, char* argv[]) {
     std::thread thread1 = std::thread(&threadSim);
 
     std::cout << "Running the flight stack communicator..." << std::endl;
-    std::thread thread2 = std::thread(&threadFlightStack);
+    std::thread thread2 = std::thread(&threadPX4MavlinkFlightStack);
 
-    std::cout << "Running RVIZ communicator..." << std::endl;
+    std::cout << "Running ROS communicator..." << std::endl;
     std::thread thread3 = std::thread(&threadRos);
 
     std::cout << "Running ArduPilot JSON communicator..." << std::endl;
     std::thread thread4 = std::thread(&threadArdupilotJson);
+
+    std::cout << "Running DroneCAN interface..." << std::endl;
+    DronecanInterface::runInSeparateThread(sim, &setpoints);
 
     thread1.join();
     thread2.join();

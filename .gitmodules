@@ -31,3 +31,6 @@
 [submodule "src/mavlink_c_library_v2/mavlink"]
 	path = src/mavlink_c_library_v2/mavlink
 	url = https://github.com/mavlink/c_library_v2.git
+[submodule "src/DronecanInterface"]
+	path = src/DronecanInterface
+	url = git@github.com:PonomarevDA/dronecan_sim_interface.git
