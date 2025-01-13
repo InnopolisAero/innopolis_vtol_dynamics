@@ -87,12 +87,12 @@ public:
                     if (data.contains("topic") && data["topic"] == "/sensor/altimeter") {
                         // Parse the "range" field from sensor_msgs/Range
                         if (data.contains("msg") && data["msg"].contains("range")) {
-                            double altitude = data["msg"]["range"].get<double>();
+                            _altitude = data["msg"]["range"].get<double>();
 
                             // Update sim altitude
-                            _sim->setRangefinderAltitude(altitude);
+                            // _sim->setRangefinderAltitude(_altitude);
 
-                            // std::cout << "[RosPublisher] Received altitude: " << altitude << std::endl;
+                            // std::cout << "[RosPublisher] Received altitude: " << _altitude << std::endl;
                         } else {
                             std::cerr << "[ERROR] /sensor/altimeter message does not contain 'range' field" << std::endl;
                         }
@@ -102,12 +102,12 @@ public:
                         // This is the "std_msgs/Float32" data
                         if (data.contains("msg") && data["msg"].contains("data"))
                         {
-                            double groundLevel = data["msg"]["data"].get<double>(); 
+                            _ground_level = data["msg"]["data"].get<double>(); 
                             // or float groundLevel = data["msg"]["data"].get<float>();
 
-                            _sim->setGroundLevelFromGeodeticAlt(groundLevel);
+                            // _sim->setGroundLevelFromGeodeticAlt(_ground_level);
 
-                            // std::cout << "[DEBUG] Ground level: " << groundLevel << std::endl;
+                            // std::cout << "[DEBUG] Ground level: " << _ground_level << std::endl;
                         }
                         else {
                             std::cerr << "[ERROR] /sensor/altimeter/ground_level message missing 'data' field!" << std::endl;
@@ -139,6 +139,9 @@ public:
     }
 
 private:
+    float _altitude;
+    float _ground_level;
+
     using client_t = websocketpp::client<websocketpp::config::asio_client>;
     using message_ptr = client_t::message_ptr;
 
@@ -268,17 +271,21 @@ private:
         };
         msg["axes"] = std::vector<double>(std::begin(airframe.values), std::end(airframe.values));
 
-        airframe.controls.print();
+        // airframe.controls.print();
         publish_message("/sim/actuators", msg);
     }
 
     void publish_gps_position() {
         auto gps = _sim->geoPosition();
+        auto position_ned_ground = _sim->positionNed();
+        position_ned_ground[2] = 0;
+        auto gps_ground = _sim->geoPositionFromNed(position_ned_ground);
+        // std::cout << "gps[2] " << gps[2] << " gps_ground[2] " << gps_ground[2] << " _ground_level " << _ground_level << std::endl;
         nlohmann::json msg = {
             {"header", {{"stamp", {{"sec", 12345}, {"nsec", 67890}}}, {"frame_id", "gps"}}},
             {"latitude", gps[0]},
             {"longitude", gps[1]},
-            {"altitude", gps[2]},
+            {"altitude", gps[2] + _ground_level - gps_ground[2]},
             {"position_covariance", {0.1, 0.0, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.1}},
             {"position_covariance_type", 2}
         };
