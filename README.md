@@ -332,32 +332,40 @@ Outdated manual instructions:
 
 ## Sim 1.0
 
-Run the dynamics simulator:
+**1. PX4 VTOL SITL**:
 
 ```bash
-./UavDynamics-x86_64.AppImage --config configs/dynamics/quadplane_vtol_5kg_px4_sitl/params.yaml
-```
+./UavDynamics-x86_64.AppImage --config configs/px4_vtol_sitl.sh
 
-PX4 SITL:
-
-Run SITL flight stack:
-
-```bash
 cd PX4-Autopilot
 DONT_RUN=1 make px4_sitl_default
 PX4_SIM_MODEL=gazebo-classic_standard_vtol ./build/px4_sitl_default/bin/px4 ./build/px4_sitl_default/etc -s etc/init.d-posix/rcS -i 0
 ```
 
-ArduPilot SITL:
+**2. PX4 Plane SITL**:
+```bash
+./UavDynamics-x86_64.AppImage --config configs/px4_plane_sitl.sh
+
+cd PX4-Autopilot
+DONT_RUN=1 make px4_sitl_default
+PX4_SIM_MODEL=gazebo-classic_plane ./build/px4_sitl_default/bin/px4 ./build/px4_sitl_default/etc -s etc/init.d-posix/rcS -i 0
+```
+
+**3. ArduPilot Plane SITL**:
 
 ```bash
-./waf configure --board=sit
-./build/sitl/bin/arducopter --model quadplane
-./waf plane
-./build/sitl/bin/arduplane --model quadplane
+./UavDynamics-x86_64.AppImage --config configs/ap_plane_sitl.sh
 
-#
-sim_vehicle.py -v ArduPlane -f JSON --console --map
+./Tools/autotest/sim_vehicle.py -v Plane --console --map -w --model JSON -l 55.75690,48.74115,-7,0
+```
+
+**4. ArduPilot Plane DroneCAN**:
+
+```bash
+./UavDynamics-x86_64.AppImage --config configs/ap_plane_sitl.sh
+
+./waf configure --board CUAVv5
+./waf --targets bin/arduplane --upload
 ```
 
 ## 8. CHANGELOG NOTES
