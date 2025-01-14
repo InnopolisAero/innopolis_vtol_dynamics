@@ -58,7 +58,7 @@ actuators:
       timeConstant: 0.01
       maxAngleDeg: 20
 
-    - name: SERVO3_FUNCTION - Throttle
+    - name: SERVO3_FUNCTION - Pusher
       type: motor
       position: [0.20, 0.00, 0.00]
       axis: [1.0, 0.00, 0.00]

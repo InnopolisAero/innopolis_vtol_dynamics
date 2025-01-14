@@ -64,6 +64,9 @@ public:
         _timer(nullptr),
         _sim(sim)
     {
+        // Initialize the actuator name to index mapping
+        initializeActuatorMapping();
+
         _client.init_asio();
 
         // Disable all logging
@@ -150,6 +153,12 @@ private:
     websocketpp::connection_hdl connection_;
     std::unique_ptr<boost::asio::steady_timer> _timer;
     std::shared_ptr<UavDynamics::Sim> _sim;
+
+    // Actuator indices mapped by name
+    int pusher_motor_idx = -1;
+    int ailerons_idx = -1;
+    int elevator_idx = -1;
+    int rudder_idx = -1;
 
     void on_open(websocketpp::connection_hdl hdl) {
         connection_ = hdl;
@@ -257,11 +266,11 @@ private:
                 .motor_front_left = 0.0,
                 .motor_rear_right = 0.0,
 
-                .pusher_motor = _sim->getActuatorStateScaled(4),
+                .pusher_motor = (_sim->getActuatorStateScaled(pusher_motor_idx)),
 
-                .ailerons = _sim->getActuatorStateScaled(6),    // or -(5)
-                .elevator = _sim->getActuatorStateScaled(7),
-                .rudder = _sim->getActuatorStateScaled(2)
+                .ailerons = (_sim->getActuatorStateScaled(ailerons_idx)),    // or handle multiple aileron indices if applicable
+                .elevator = (_sim->getActuatorStateScaled(elevator_idx)),
+                .rudder = (_sim->getActuatorStateScaled(rudder_idx))
             }
         };
 
@@ -302,6 +311,39 @@ private:
             _client.send(connection_, publish_msg.dump(), websocketpp::frame::opcode::text);
         } catch (const websocketpp::exception& e) {
             std::cerr << "Error sending message: " << e.what() << std::endl;
+        }
+    }
+
+    /**
+     * @brief Initializes the actuator name to index mapping by scanning all actuators.
+     *
+     * It searches for actuators containing "rudder", "aileron", "elevator", or "pusher" (case-insensitive)
+     * in their names and assigns their indices to the respective member variables.
+     */
+    void initializeActuatorMapping()
+    {
+        rudder_idx = _sim->findActuatorIndexByName("rudder");
+        ailerons_idx = _sim->findActuatorIndexByName("aileron");
+        elevator_idx = _sim->findActuatorIndexByName("elevator");
+        pusher_motor_idx = _sim->findActuatorIndexByName("pusher");
+
+        std::cout << "[RosPublisher] Found actuators mapping: rudder: " << rudder_idx 
+                                                                        << ", aileron: " << ailerons_idx
+                                                                        << ", elevator: " << elevator_idx 
+                                                                        << ", pusher: " << pusher_motor_idx << std::endl;
+
+        // Validate that all required actuators were found
+        if (rudder_idx == -1) {
+            std::cerr << "[RosPublisher][Error] Rudder actuator not found in configuration!" << std::endl;
+        }
+        if (ailerons_idx == -1) {
+            std::cerr << "[RosPublisher][Error] Ailerons actuator not found in configuration!" << std::endl;
+        }
+        if (elevator_idx == -1) {
+            std::cerr << "[RosPublisher][Error] Elevator actuator not found in configuration!" << std::endl;
+        }
+        if (pusher_motor_idx == -1) {
+            std::cerr << "[RosPublisher][Error] Pusher motor actuator not found in configuration!" << std::endl;
         }
     }
 };
