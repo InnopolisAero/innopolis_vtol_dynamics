@@ -268,7 +268,7 @@ private:
 
                 .pusher_motor = (_sim->getActuatorStateScaled(pusher_motor_idx)),
 
-                .ailerons = (_sim->getActuatorStateScaled(ailerons_idx)),    // or handle multiple aileron indices if applicable
+                .ailerons = -(_sim->getActuatorStateScaled(ailerons_idx)),    // or handle multiple aileron indices if applicable
                 .elevator = (_sim->getActuatorStateScaled(elevator_idx)),
                 .rudder = (_sim->getActuatorStateScaled(rudder_idx))
             }
