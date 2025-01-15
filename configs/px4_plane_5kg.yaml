@@ -10,11 +10,11 @@
 sim:
   initPosition: [55.75690, 48.74115, -7.8] # [lat (degree), lon (degree), alt (meters)]
 
-  # N (0°   rotation about Z-axis) -  {1.0000, 0.0, 0.0, 0.000}
-  # E (90°  rotation about Z-axis) -  {0.7070, 0.0, 0.0, 0.707}
-  # S (180° rotation about Z-axis) -  {0.0000, 0.0, 0.0, 1.000}
-  # W (-90° rotation about Z-axis) -  {-0.707, 0.0, 0.0, 0.707}
-  initAttitude: [0.92388, 0.0, 0.0, 0.38268]  # WXYZ, FRD-NED
+  # Initial Yaw
+  #   - 0 degrees yaw points towards North.
+  #   - Yaw increases clockwise.
+  #  (0 => North, -90 => East, -180 => South, -90 => West)
+  initYawDeg: 45.0  # Initial yaw angle in degrees
 
   integrationFrequency: 1000 # Hz
 
@@ -39,6 +39,7 @@ vehicle:
   inertia: [0.478, 0,     0,
             0,     0.342, 0,
             0,     0,     0.811] # kg*m^2
+  center_of_gravity: [-0.15, 0.0, -0.05]
   lonStaticFriction: 0.5
   lonKineticFriction: 0.4
   latStaticFriction: 0.8
