@@ -10,11 +10,15 @@
 sim:
   initPosition: [55.75690, 48.74115, -7.8] # [lat (degree), lon (degree), alt (meters)]
 
+  # Attitude quaternion, WXYZ, FRD-NED
   # N (0°   rotation about Z-axis) -  {1.0000, 0.0, 0.0, 0.000}
   # E (90°  rotation about Z-axis) -  {0.7070, 0.0, 0.0, 0.707}
   # S (180° rotation about Z-axis) -  {0.0000, 0.0, 0.0, 1.000}
   # W (-90° rotation about Z-axis) -  {-0.707, 0.0, 0.0, 0.707}
-  initAttitude: [0.92388, 0.0, 0.0, 0.38268]  # WXYZ, FRD-NED
+  #    +45° rotation about Z-axis  -  {0.92388, 0.0, 0.0, 0.38268}
+  #    +50° rotation about Z-axis  -  {0.90631, 0.0, 0.0, 0.42262}
+  #    +60° rotation about Z-axis  -  {0.86602, 0.0, 0.0, 0.50000}
+  initAttitude: [0.88701, 0.0, 0.0, 0.46175]  # +55°
 
   integrationFrequency: 1000 # Hz
 
@@ -48,13 +52,13 @@ actuators:
   airframe:
     - name: SERVO1_FUNCTION - Aileron
       type: servo
-      cm: [+0.2, 0.00, -0.02]
+      cm: [+0.05, 0.00, -0.005]
       timeConstant: 0.01
       maxAngleDeg: 20
 
     - name: SERVO3_FUNCTION - Elevator
       type: servo
-      cm: [0.00, 0.458, 0.00]
+      cm: [0.00, 0.1, 0.00]
       timeConstant: 0.01
       maxAngleDeg: 20
 
@@ -63,22 +67,17 @@ actuators:
       position: [0.20, 0.00, 0.00]
       axis: [1.0, 0.00, 0.00]
       directionCCW: True
-      model: bldcAnalyticModel2
+      model: bldcAnalyticModel
 
     - name: SERVO4_FUNCTION - Rudder
       type: servo
-      cm: [0.00, 0.00, 1.15]
+      cm: [0.00, 0.00, 0.1]
       timeConstant: 0.01
       maxAngleDeg: 20
 
   bldcAnalyticModel:
     maxVelocity: 1600.0 # rad/s
     maxThrust: 50.0
-    maxTorque: 0.7
-
-  bldcAnalyticModel2:
-    maxVelocity: 3500.0 # rad/s
-    maxThrust: 80.0
     maxTorque: 0.7
 
 ## 5. Fixed Wing Aerodynamics

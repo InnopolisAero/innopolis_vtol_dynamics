@@ -354,7 +354,7 @@ PX4_SIM_MODEL=gazebo-classic_plane ./build/px4_sitl_default/bin/px4 ./build/px4_
 **3. ArduPilot Plane SITL**:
 
 ```bash
-./UavDynamics-x86_64.AppImage --config configs/ap_plane_sitl.sh
+./UavDynamics-x86_64.AppImage --config configs/ap_plane.yaml
 
 ./Tools/autotest/sim_vehicle.py -v Plane --console --map -w --model JSON -l 55.75690,48.74115,-7,0
 ```
@@ -362,7 +362,8 @@ PX4_SIM_MODEL=gazebo-classic_plane ./build/px4_sitl_default/bin/px4 ./build/px4_
 **4. ArduPilot Plane DroneCAN**:
 
 ```bash
-./UavDynamics-x86_64.AppImage --config configs/ap_plane_sitl.sh
+./scripts/create_slcan.sh
+./UavDynamics-x86_64.AppImage --config configs/ap_plane.yaml
 
 ./waf configure --board CUAVv5
 ./waf --targets bin/arduplane --upload
