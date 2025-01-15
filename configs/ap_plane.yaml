@@ -8,15 +8,15 @@
 # Reference: https://github.com/PX4/PX4-SITL_gazebo-classic/blob/main/models/standard_vtol/standard_vtol.sdf.jinja
 
 sim:
-  initPosition: [55.75690, 48.741185, -7.8] # [lat (degree), lon (degree), alt (meters)]
+  init_position: [55.75690, 48.741185, -7.8] # [lat (degree), lon (degree), alt (meters)]
 
   # Initial Yaw
   #   - 0 degrees yaw points towards North.
   #   - Yaw increases clockwise.
   #  (0 => North, -90 => East, -180 => South, -90 => West)
-  initYawDeg: 51.0  # Initial yaw angle in degrees
+  init_yaw_deg: 51.0  # Initial yaw angle in degrees
   
-  integrationFrequency: 1000 # Hz
+  integration_frequency: 1000 # Hz
 
 environment:
   # This is the standard acceleration due to gravity on Earth's surface.
@@ -30,9 +30,9 @@ environment:
   # operations, you might use a lower value. For example:
   # At 5000 m altitude: ~0.736 kg/m^3
   # At 10,000 m altitude: ~0.413 kg/m^3
-  atmoRho: 1.2  # air density (kg/m^3)
+  air_density: 1.2  # air density (kg/m^3)
 
-  windNed: [0.0, 0.0, 0.0]
+  wind_ned: [0.0, 0.0, 0.0]
 
 vehicle:
   mass: 2.0 # kg
@@ -40,47 +40,48 @@ vehicle:
             0,     0.67, 0,
             0,     0,     0.83] # kg*m^2
   center_of_gravity: [-0.15, 0.0, -0.05]
-  lonStaticFriction: 0.3
-  lonKineticFriction: 0.2
-  latStaticFriction: 0.8
-  latKineticFriction: 0.7
+  lon_static_friction: 0.3
+  lon_kinetic_friction: 0.2
+  lat_static_friction: 0.8
+  lat_kinetic_friction: 0.7
 
 actuators:
+  bldc_analytic_model:
+    max_velocity: 1600.0 # rad/s
+    max_thrust: 25.0
+    max_torque: 0.5
+
+  bldc_analytic_model2:
+    max_velocity: 3500.0 # rad/s
+    max_thrust: 25.0
+    max_torque: 0.5
+
   airframe:
     - name: SERVO1_FUNCTION - Aileron
       type: servo
-      cm: [+0.05, 0.00, -0.005]
-      timeConstant: 0.01
-      maxAngleDeg: 20
+      cm: [0.05, 0.00, -0.005]
+      time_constant: 0.01
+      max_angle_deg: 20
 
     - name: SERVO3_FUNCTION - Elevator
       type: servo
       cm: [0.00, 0.1, 0.00]
-      timeConstant: 0.01
-      maxAngleDeg: 20
+      time_constant: 0.01
+      max_angle_deg: 20
 
     - name: SERVO3_FUNCTION - Pusher
       type: motor
       position: [0.20, 0.00, 0.00]
       axis: [1.0, 0.00, 0.00]
-      directionCCW: True
-      model: bldcAnalyticModel
+      direction_ccw: True
+      model: bldc_analytic_model
 
     - name: SERVO4_FUNCTION - Rudder
       type: servo
       cm: [0.00, 0.00, 0.1]
-      timeConstant: 0.01
-      maxAngleDeg: 20
+      time_constant: 0.01
+      max_angle_deg: 20
 
-  bldcAnalyticModel:
-    maxVelocity: 1600.0 # rad/s
-    maxThrust: 25.0
-    maxTorque: 0.5
-
-  bldcAnalyticModel2:
-    maxVelocity: 3500.0 # rad/s
-    maxThrust: 25.0
-    maxTorque: 0.5
 
 # -----------------------------------------------------------------------------
 # 5. Aerodynamics Configuration
@@ -592,5 +593,5 @@ aerodynamics:
       Cn_r: -0.2    # Yawing moment change per yaw rate (r)
 
 sensors:
-  accVariance:  0.0005
-  gyroVariance: 0.0005
+  acc_variance:  0.0005
+  gyro_variance: 0.0005
