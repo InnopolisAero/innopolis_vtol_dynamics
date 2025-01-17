@@ -18,6 +18,11 @@ sim:
   
   integration_frequency: 1000 # Hz
 
+  connection-3d:
+    mode: "server"       # "server" or "client"
+    ip: "ws://localhost"
+    port: 9090
+
 environment:
   # This is the standard acceleration due to gravity on Earth's surface.
   # If you are simulating in a different planetary context or need slight

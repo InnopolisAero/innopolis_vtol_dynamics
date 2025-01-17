@@ -121,9 +121,9 @@ void threadPX4MavlinkFlightStack() {
     }
 }
 
-void threadRos() {
-    RosPublisher publisher(sim);
-    publisher.run();
+void threadRos(const std::string& path) {
+    RosInterface ros_interface(sim, path);
+    ros_interface.run();
 }
 
 void threadArdupilotJson() {
@@ -179,7 +179,9 @@ int main(int argc, char* argv[]) {
     std::thread thread2 = std::thread(&threadPX4MavlinkFlightStack);
 
     std::cout << "Running ROS communicator..." << std::endl;
-    std::thread thread3 = std::thread(&threadRos);
+    std::thread thread3([&path]() {
+        threadRos(path);
+    });
 
     std::cout << "Running ArduPilot JSON communicator..." << std::endl;
     std::thread thread4 = std::thread(&threadArdupilotJson);
