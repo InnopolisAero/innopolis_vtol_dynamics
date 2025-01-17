@@ -12,6 +12,11 @@ sim:
   initAttitude: [0.92388, 0.0, 0.0, 0.38268]  # WXYZ, FRD-NED
   integration_frequency: 1000 # Hz
 
+  connection-3d:
+    mode: "server"       # Use "server" for standalone mode (no ROS needed), or "client" for integration with ROS.
+    ip: "ws://localhost" # Only used in "client" mode: ROSBridge WebSocket server address.
+    port: 9090           # Port for the connection: same for "server" or "client" mode.
+
 environment:
   # This is the standard acceleration due to gravity on Earth's surface.
   # If you are simulating in a different planetary context or need slight
