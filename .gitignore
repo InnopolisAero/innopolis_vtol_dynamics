@@ -3,3 +3,4 @@ logs_and_video/
 rviz/
 *.pyc
 downloads*
+build/

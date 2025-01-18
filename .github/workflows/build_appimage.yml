@@ -1,0 +1,22 @@
+name: Build AppImage
+
+on: [push]
+
+defaults:
+  run:
+    shell: bash
+jobs:
+  build_app_image:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Install dependencies
+        run: sudo apt-get install -y libyaml-cpp-dev libeigen3-dev imagemagick fuse libboost-all-dev
+
+      - name: Build AppImage
+        run: ./scripts/build_appimage.sh

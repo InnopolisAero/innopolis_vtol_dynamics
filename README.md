@@ -330,6 +330,45 @@ Outdated manual instructions:
 - [PX4 DroneCAN manual configuration instructions](docs/px4/dronecan.md)
 - [ArduPilot manual configuration instructions](docs/ardupilot/README.md)
 
+## Sim 1.0
+
+**1. PX4 VTOL SITL**:
+
+```bash
+./UavDynamics-x86_64.AppImage --config configs/px4_vtol_sitl.sh
+
+cd PX4-Autopilot
+DONT_RUN=1 make px4_sitl_default
+PX4_SIM_MODEL=gazebo-classic_standard_vtol ./build/px4_sitl_default/bin/px4 ./build/px4_sitl_default/etc -s etc/init.d-posix/rcS -i 0
+```
+
+**2. PX4 Plane SITL**:
+```bash
+./UavDynamics-x86_64.AppImage --config configs/px4_plane_sitl.sh
+
+cd PX4-Autopilot
+DONT_RUN=1 make px4_sitl_default
+PX4_SIM_MODEL=gazebo-classic_plane ./build/px4_sitl_default/bin/px4 ./build/px4_sitl_default/etc -s etc/init.d-posix/rcS -i 0
+```
+
+**3. ArduPilot Plane SITL**:
+
+```bash
+./UavDynamics-x86_64.AppImage --config configs/ap_plane.yaml
+
+./Tools/autotest/sim_vehicle.py -v Plane --console --map -w --model JSON -l 55.75690,48.74115,-7,0
+```
+
+**4. ArduPilot Plane DroneCAN**:
+
+```bash
+./scripts/create_slcan.sh
+./UavDynamics-x86_64.AppImage --config configs/ap_plane.yaml
+
+./waf configure --board CUAVv5
+./waf --targets bin/arduplane --upload
+```
+
 ## 8. CHANGELOG NOTES
 
 | Version | ReleaseDate | Major changes |

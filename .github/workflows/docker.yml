@@ -9,6 +9,7 @@ on:
     - '*'
 jobs:
   docker:
+    if: false  # Disable it
     strategy:
       matrix:
         os: [ubuntu-20.04, macos-13]
