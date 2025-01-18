@@ -113,14 +113,14 @@ echo "SLCAN creator settings:
 - DEV_PATH=$DEV_PATH
 - INTERFACE=$INTERFACE"
 
-if [[ $(ifconfig | grep $INTERFACE) ]]; then
+if [[ $(ip link show | grep $INTERFACE) ]]; then
     log_warn "specified interface already exist, skip"
     [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return 1
 fi
 
 create_slcan
 
-if [[ -z $(ifconfig | grep $INTERFACE) ]]; then
+if [[ -z $(ip link show | grep $INTERFACE) ]]; then
     log_error "Interface '$INTERFACE' has not been successfully created"
     [[ "${BASH_SOURCE[0]}" -ef "$0" ]] && exit 0 || return 1
 fi
