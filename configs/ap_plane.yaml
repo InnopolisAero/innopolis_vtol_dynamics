@@ -44,7 +44,7 @@ vehicle:
   inertia: [0.17, 0,     0,
             0,     0.67, 0,
             0,     0,     0.83] # kg*m^2
-  center_of_gravity: [-0.15, 0.0, -0.05]
+  center_of_gravity: [0.15, 0.0, 0.05]
   lon_static_friction: 0.3
   lon_kinetic_friction: 0.2
   lat_static_friction: 0.8
